@@ -6,7 +6,6 @@ const path = require("path");
 
 const app = express();
 app.use(cors());
-const port = 8080;
 
 app.get("/api/bundle/:packageName", async (req, res) => {
   const { packageName } = req.params;
@@ -23,10 +22,6 @@ app.get("/api/bundle/:packageName", async (req, res) => {
     res.download(tgzPath);
     fs.remove(tgzPath);
   });
-});
-
-app.listen(port, () => {
-  console.log(`listening on port ${port}`);
 });
 
 export default app;
