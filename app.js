@@ -15,7 +15,7 @@ app.get("/bundle/:packageName", async (req, res) => {
   const { packageName } = req.params;
 
   try {
-    await exec(`pb ${packageName} -F ${packageName}.tgz`);
+    await exec(`pb ${packageName} -x -F ${packageName}.tgz`);
     const tgzPath = path.join(__dirname, `${packageName}.tgz`);
     res.download(tgzPath);
     fs.remove(tgzPath);
