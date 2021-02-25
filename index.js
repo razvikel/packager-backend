@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 const port = 8080;
 
-app.get("/api/bundle/:packageName", async (req, res) => {
+app.get("/bundle/:packageName", async (req, res) => {
   const { packageName } = req.params;
 
   npmBundle([packageName], { verbose: true }, (error, output) => {
