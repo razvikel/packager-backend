@@ -12,11 +12,11 @@ app.get("/api/bundle/:packageName", async (req, res) => {
 
   npmBundle([packageName], { verbose: true }, (error, output) => {
     if (error) {
-      console.error(error);
       throw error;
     }
     const tgzPath = path.join(
       __dirname,
+      "../",
       output.file.slice(0, output.file.length - 1)
     );
     res.download(tgzPath);
