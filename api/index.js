@@ -1,5 +1,4 @@
 const express = require("express");
-const exec = require("await-exec");
 const cors = require("cors");
 const fs = require("fs-extra");
 const npmBundle = require("npm-bundle");
@@ -9,7 +8,7 @@ const app = express();
 app.use(cors());
 const port = 8080;
 
-app.get("/bundle/:packageName", async (req, res) => {
+app.get("/api/bundle/:packageName", async (req, res) => {
   const { packageName } = req.params;
 
   npmBundle([packageName], { verbose: true }, (error, output) => {
@@ -28,3 +27,5 @@ app.get("/bundle/:packageName", async (req, res) => {
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
+
+export default app;
