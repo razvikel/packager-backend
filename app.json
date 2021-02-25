@@ -1,0 +1,7 @@
+
+{
+    "name": "Packager",
+    "description": "Generates a bundle for an NPM package",
+    "repository": "https://github.com/razvikel/packager-backend",
+    "keywords": ["node", "express"]
+  }
