@@ -8,6 +8,10 @@ const app = express();
 app.use(cors());
 const port = 8080;
 
+app.get("/", async (req, res) => {
+  res.send("Welcome to the packager!");
+});
+
 app.get("/bundle/:packageName", async (req, res) => {
   const { packageName } = req.params;
 
