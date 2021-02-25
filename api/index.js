@@ -11,6 +11,7 @@ const port = 8080;
 app.get("/api/bundle/:packageName", async (req, res) => {
   const { packageName } = req.params;
 
+  console.log("hey " + packageName);
   npmBundle([packageName], { verbose: true }, (error, output) => {
     if (error) {
       console.error(error);
