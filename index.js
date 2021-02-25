@@ -6,22 +6,26 @@ const path = require("path");
 
 const app = express();
 app.use(cors());
+const port = 8080;
 
 app.get("/api/bundle/:packageName", async (req, res) => {
   const { packageName } = req.params;
 
   npmBundle([packageName], { verbose: true }, (error, output) => {
     if (error) {
-      throw error;
+      console.error(error);
+      res.sendStatus(500);
+    } else {
+      const tgzPath = path.join(
+        __dirname,
+        output.file.slice(0, output.file.length - 1)
+      );
+      res.download(tgzPath);
+      fs.remove(tgzPath);
     }
-    const tgzPath = path.join(
-      __dirname,
-      "_files",
-      output.file.slice(0, output.file.length - 1)
-    );
-    res.download(tgzPath);
-    fs.remove(tgzPath);
   });
 });
 
-export default app;
+app.listen(port, () => {
+  console.log(`listening on port ${port}`);
+});
