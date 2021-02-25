@@ -16,7 +16,7 @@ app.get("/api/bundle/:packageName", async (req, res) => {
     }
     const tgzPath = path.join(
       __dirname,
-      "../",
+      "_files",
       output.file.slice(0, output.file.length - 1)
     );
     res.download(tgzPath);
