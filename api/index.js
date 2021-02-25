@@ -9,10 +9,8 @@ app.use(cors());
 const port = 8080;
 
 app.get("/api/bundle/:packageName", async (req, res) => {
-  console.log("started trying lol");
   const { packageName } = req.params;
 
-  console.log("hey " + packageName);
   npmBundle([packageName], { verbose: true }, (error, output) => {
     if (error) {
       console.error(error);
