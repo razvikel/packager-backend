@@ -20,10 +20,13 @@ app.get("/bundle/:packageName", async (req, res) => {
         console.error(error);
         res.sendStatus(500);
       } else {
+        console.log(`dirname: ${__dirname}`);
+        console.log(`file: ${output.file}`);
         const tgzPath = path.join(
           __dirname,
           output.file.slice(0, output.file.length - 1)
         );
+        console.log(`tgz path: ${tgzPath}`);
         res.download(tgzPath);
         fs.remove(tgzPath);
       }
