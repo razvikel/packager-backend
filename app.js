@@ -3,7 +3,8 @@ const cors = require("cors");
 const fs = require("fs-extra");
 const path = require("path");
 const exec = require("await-exec");
-
+const Docker = require("dockerode");
+const docker = new Docker();
 const app = express();
 app.use(cors());
 
@@ -25,4 +26,15 @@ app.get("/bundle/:packageName", async (req, res) => {
   }
 });
 
+app.get("/docker/images", async (req, res) => {
+  const images = await docker.searchImages({ term: "any", limit: 10 });
+  res.send(images);
+});
+
+app.get("/docker/:imageName", async (req, res) => {
+  const { imageName } = req.params;
+});
+
 module.exports = app;
+
+app.listen(8080, () => console.log("listening"));
