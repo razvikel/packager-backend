@@ -39,12 +39,12 @@ app.get("/docker/images", async (req, res) => {
   }
 });
 
-app.get("/docker/:imageName", async (req, res) => {
-  const { imageName } = req.params;
+app.get("/docker/*", async (req, res) => {
+  const imageName = req.params[0];
 
   await exec(`docker pull ${imageName}`, { log: true });
-  await exec(`docker save ${imageName} > ${imageName}.tar`, { log: true });
-  const tarPath = path.join(__dirname, `${imageName}.tar`);
+  await exec(`docker save ${imageName} > image.tar`, { log: true });
+  const tarPath = path.join(__dirname, `image.tar`);
   res.download(tarPath);
   fs.remove(tarPath);
 });
