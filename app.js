@@ -3,8 +3,6 @@ const cors = require("cors");
 const fs = require("fs-extra");
 const path = require("path");
 const exec = require("await-exec");
-const Docker = require("dockerode");
-const docker = new Docker();
 const app = express();
 app.use(cors());
 
@@ -16,7 +14,7 @@ app.get("/bundle/:packageName", async (req, res) => {
   const { packageName } = req.params;
 
   try {
-    await exec(`pb ${packageName} -x -F ${packageName}.tgz`);
+    await exec(`pb ${packageName} -x -F ${packageName}.tgz`, { log: true });
     const tgzPath = path.join(__dirname, `${packageName}.tgz`);
     res.download(tgzPath);
     fs.remove(tgzPath);
@@ -27,12 +25,28 @@ app.get("/bundle/:packageName", async (req, res) => {
 });
 
 app.get("/docker/images", async (req, res) => {
-  const images = await docker.searchImages({ term: "any", limit: 10 });
-  res.send(images);
+  const { term, limit } = req.query;
+  const images = await exec(
+    `docker search --format "{{.Name}}" --limit=${limit} ${term}`,
+    { log: true }
+  );
+
+  if (images.stderr) {
+    console.error(images.stderr);
+    res.sendStatus(500);
+  } else {
+    res.send(images.stdout.split("\n").filter((img) => img.length > 0));
+  }
 });
 
 app.get("/docker/:imageName", async (req, res) => {
   const { imageName } = req.params;
+
+  await exec(`docker pull ${imageName}`, { log: true });
+  await exec(`docker save ${imageName} > ${imageName}.tar`, { log: true });
+  const tarPath = path.join(__dirname, `${imageName}.tar`);
+  res.download(tarPath);
+  fs.remove(tarPath);
 });
 
 module.exports = app;
